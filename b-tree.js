@@ -14,28 +14,63 @@ function BTreeNode(leaf = true) {
   this.lastChild = null;
 }
 
-function Element() {
-  this.value = undefined;
-  this.typle = null;
+function Element(value, typle) {
+  this.value = value;
+  this.typle = typle;
   this.child = null;
 }
 
 // const BTree.prototype = {};
-
 BTree.prototype.add = function(
   value, // number or string
   typle // related data
 ) {
-  const curNode =  this.root;
+  let curNode =  this.root;
   if (curNode.elements.length === this.minDegree * 2 - 1) {
     const newRoot = new BTreeNode(false);
     const leftChild = new BTreeNode(curNode.leaf);
     const rightChild = new BTreeNode(curNode.leaf);
-    // this.root = new BTreeNode(false);
-    // this.root.elements.push()
     rightChild.elements = curNode.elements.slice(this.minDegree);
     rightChild.lastChild = curNode.lastChild;
-    
+    leftChild.elements = curNode.elements.slice(0, this.minDegree - 1);
+    leftChild.lastChild = curNode.elements[this.minDegree - 1].child;
+    newRoot.elements.push(curNode.elements[this.minDegree - 1]);
+    newRoot.elements[0].child = leftChild;
+    newRoot.lastChild = rightChild;
+    this.root = newRoot;
+    curNode = value < this.root.value ? leftChild : rightChild;
+  }
+  while (!curNode.leaf) {
+    for (const curElement of curNode.elements) {
+      if (value < curElement.value) {
+        if (curElement.child.length === this.minDegree * 2 - 1) {
+          const child = curElement.child;
+          const newLeftChild = new BTreeNode(child.leaf);
+          const newRightChild = new BTreeNode(child.leaf);
+          newRightChild.elements = child.elements.slice(this.minDegree);
+          newRightChild.lastChild = child.lastChild;
+          newLeftChild.elements = child.elements.slice(0, this.minDegree - 1);
+          newLeftChild.lastChild = child.elements[this.minDegree - 1].child;
+          curElement.child = newRightChild;
+          const median = child.elements[this.minDegree - 1];
+          median.child = newLeftChild;
+          curNode.elements.splice(
+            curNode.elements.indexOf(curElement) - 1, 0, median
+          );
+          curNode = value < median.value ? newLeftChild : newRightChild;
+          break;
+        }
+        curNode = curElement.child;
+        break;
+      }
+    }
+  }
+  // Now in curNode is node (leaf), in which we need to insert an element
+  let curElementIndex = 0;
+  for (; curElementIndex < curNode.elements.length; curElementIndex++) {
+    if (curNode.elements[curElementIndex].value < value) {
+      curNode.elements.splice(curElementIndex, 0, new Element(value, typle));
+    }
   }
 };
 
@@ -44,7 +79,7 @@ BTree.prototype.delete = function(value) {
 };
 
 BTree.prototype.getEqual = function(value) {
-  
+
 };
 
 BTree.prototype.getLarger = function(value) {
