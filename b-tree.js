@@ -25,6 +25,10 @@ BTree.prototype.add = function(
   value, // number or string
   typle // related data
 ) {
+  if (this.root.elements.length === 0) {
+    this.root.elements.push(new Element(value, typle));
+    return this;
+  }
   let curNode =  this.root;
   if (curNode.elements.length === this.minDegree * 2 - 1) {
     const newRoot = new BTreeNode(false);
@@ -70,6 +74,7 @@ BTree.prototype.add = function(
   for (; curElementIndex < curNode.elements.length; curElementIndex++) {
     if (curNode.elements[curElementIndex].value < value) {
       curNode.elements.splice(curElementIndex, 0, new Element(value, typle));
+      return this;
     }
   }
 };
@@ -87,7 +92,7 @@ BTree.prototype.getLarger = function(value) {
 };
 
 BTree.prototype.getLess = function(value) {
-  
+
 };
 
 BTree.prototype.getBetween = function(
@@ -95,6 +100,8 @@ BTree.prototype.getBetween = function(
   finishValue
 ) {
 
-}
+};
 
 // BTree.prototype = Object.assign({}, BTree.prototype);
+
+module.exports = BTree;
