@@ -20,8 +20,9 @@ function Element(value, typle) {
   this.child = null;
 }
 
-// const BTree.prototype = {};
-BTree.prototype.add = function(
+const method = {};
+
+BTree.method = function(
   value, // number or string
   typle // related data
 ) {
@@ -103,29 +104,29 @@ BTree.prototype.add = function(
   return this;
 };
 
-BTree.prototype.delete = function(value) {
+method.delete = function(value) {
 
 };
 
-BTree.prototype.getEqual = function(value) {
+method.getEqual = function(value) {
 
 };
 
-BTree.prototype.getLarger = function(value) {
+method.getLarger = function(value) {
 
 };
 
-BTree.prototype.getLess = function(value) {
+method.getLess = function(value) {
 
 };
 
-BTree.prototype.getBetween = function(
+method.getBetween = function(
   startValue,
   finishValue
 ) {
 
 };
 
-// BTree.prototype = Object.assign({}, BTree.prototype);
+BTree.prototype = Object.assign({}, BTree.prototype);
 
 module.exports = BTree;
