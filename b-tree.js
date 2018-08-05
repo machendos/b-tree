@@ -22,7 +22,7 @@ function Element(value, typle) {
 
 const method = {};
 
-BTree.method = function(
+method.add = function(
   value, // number or string
   typle // related data
 ) {
@@ -109,7 +109,22 @@ method.delete = function(value) {
 };
 
 method.getEqual = function(value) {
-
+  let curNode = this.root;
+  while (true) {
+    let needChangedNodeFlag = true;
+    for (const curElement of curNode.elements) {
+      if (curElement.value <= value) {
+        if (curElement.value === value) return curElement.typle;
+        if (curElement.leaf) return null;
+        curNode = curElement.child;
+        needChangedNodeFlag = false;
+        break;
+      }
+    }
+    if (needChangedNodeFlag) {
+      curNode = curNode.lastChild;
+    }
+  }
 };
 
 method.getLarger = function(value) {
