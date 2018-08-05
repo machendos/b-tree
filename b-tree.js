@@ -113,14 +113,15 @@ method.getEqual = function(value) {
   while (true) {
     let needChangedNodeFlag = true;
     for (const curElement of curNode.elements) {
-      if (curElement.value <= value) {
+      if (value <= curElement.value) {
         if (curElement.value === value) return curElement.typle;
-        if (curElement.leaf) return null;
+        if (curNode.leaf) return null;
         curNode = curElement.child;
         needChangedNodeFlag = false;
         break;
       }
     }
+    if (curNode.leaf) return null;
     if (needChangedNodeFlag) {
       curNode = curNode.lastChild;
     }
@@ -142,6 +143,6 @@ method.getBetween = function(
 
 };
 
-BTree.prototype = Object.assign({}, BTree.prototype);
+BTree.prototype = Object.assign({}, method);
 
 module.exports = BTree;
