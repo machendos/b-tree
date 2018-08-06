@@ -134,17 +134,38 @@ method.getLarger = function(value) {
 
 method.getLess = function(value) {
   const result = [];
-  const getLessWorker = function(curNode) {
+  const addAll = function(curNode) {
+    if (curNode.leaf) {
+      for (const curElement of curNode.elements) {
+        result.push(curElement.typle);
+      }
+    } else {
+      for (const curElement of curNode.elements) {
+        result.push(curElement.typle);
+        addAll(curElement.child);
+      }
+      addAll(curNode.lastChild);
+    }
+  };
+
+  const addLess = function(curNode) {
     for (const curElement of curNode.elements) {
       if (curElement.value < value) {
         result.push(curElement.typle);
-        if (!curElement.leaf) {
-          getLessWorker(curElement.child);
+        if (!curNode.leaf) {
+          addAll(curElement.child);
         }
-      } else break;
+      } else if (!curNode.leaf) {
+        addLess(curElement.child);
+      }
+    }
+    const length = curNode.elements.length;
+    if (curNode.elements[length - 1].value < value && (!curNode.leaf)) {
+      addLess(curNode.lastChild);
     }
   };
-  getLessWorker(this.root);
+  addLess(this.root);
+  return result;
 };
 
 method.getBetween = function(
