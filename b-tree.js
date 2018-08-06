@@ -161,11 +161,15 @@ method.getLarger = function(value) {
           }
           result.push(curElement.typle);
         }
-        addAll(curNode.lastChild);
+        if (!curNode.leaf) {
+          addAll(curNode.lastChild);
+        }
         return result;
       }
     }
-    addLarger(curNode.lastChild);
+    if (!curNode.leaf) {
+      addLarger(curNode.lastChild);
+    }
     return result;
   };
   return addLarger(this.root);
