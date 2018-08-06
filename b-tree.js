@@ -193,7 +193,7 @@ methods.getLess = function(value) {
 
   const addLess = function(curNode) {
     for (const curElement of curNode.elements) {
-      if (curElement.value < value) {
+      if (curElement.value <= value) {
         if (!curNode.leaf) {
           addAll(curElement.child);
         }
@@ -235,7 +235,7 @@ methods.getBetween = function(
 
   const addLess = function(curNode) {
     for (const curElement of curNode.elements) {
-      if (curElement.value < finishValue) {
+      if (curElement.value <= finishValue) {
         if (!curNode.leaf) {
           addAll(curElement.child);
         }
@@ -251,21 +251,64 @@ methods.getBetween = function(
     }
   };
 
-  const addMix = function(curNode) {
-    for (const curElement of curNode.elements) {
-      if (curElement.value < startValue) continue;
-      if (curElement.value <= finishValue) {
+  const addLarger = function(curNode) {
+    let curElementIndex = 0;
+    for (; curElementIndex < curNode.elements.length; curElementIndex++) {
+      const curElement = curNode.elements[curElementIndex];
+      if (curElement.value <= startValue) {
+        continue;
+      } else {
         if (!curNode.leaf) {
-          addLess(curElement.child);
+          addLarger(curElement.child);
         }
         result.push(curElement.typle);
-      }
-      if (curElement.value >= finishValue) {
+        for (const curElement of curNode.elements.slice(curElementIndex + 1)) {
+          if (!curNode.leaf) {
+            addAll(curElement.child);
+          }
+          result.push(curElement.typle);
+        }
         if (!curNode.leaf) {
-          addMix(curElement.child);
+          addAll(curNode.lastChild);
         }
         break;
       }
+    }
+    if (!curNode.leaf) {
+      addLarger(curNode.lastChild);
+    }
+  };
+
+  const addMix = function(curNode) {
+    let curElementIndex = 0;
+    for (; curElementIndex < curNode.elements.length; curElementIndex++) {
+      const curElement = curNode.elements[curElementIndex];
+      if (curElement.value < startValue) continue;
+      if (finishValue < curElement.value) {
+        if (!curNode.leaf) {
+          addMix(curNode.child);
+        }
+        break;
+      }
+      if (!curNode.leaf) {
+        addLarger(curElement.child); /////
+      }
+      result.push(curElement.typle);
+
+      for (const curElement of curNode.elements.slice(curElementIndex + 1)) {
+        if (curElement.value <= finishValue) {
+          if (!curNode.leaf) {
+            addAll(curElement.child);
+          }
+          result.push(curElement.typle);
+        } else {
+          if (!curNode.leaf) {
+            addLess(curElement.child);
+          }
+          break;
+        }
+      }
+      break;
     }
     const length = curNode.elements.length;
     const lastValue = curNode.elements[length - 1].value;
@@ -274,40 +317,7 @@ methods.getBetween = function(
     }
   };
 
-  const addLarger = function(curNode) {
-    let curElementIndex = 0;
-    for (; curElementIndex < curNode.elements.length; curElementIndex++) {
-      const curElement = curNode.elements[curElementIndex];
-      if (curElement.value <= startValue) {
-        continue;
-      } else if (curElement.value < finishValue) {
-        if (!curNode.leaf) {
-          addLarger(curElement.child);
-        }
-        result.push(curElement.typle);
-        for (const curElement of curNode.elements.slice(curElementIndex + 1)) {
-          if (curElement.value >= finishValue) {
-            addLess(curElement.child);
-            break;
-          }
-          if (!curNode.leaf) {
-            addAll(curElement.child);
-          }
-          result.push(curElement.typle);
-        }
-        break;
-      } else if (!curNode.child) {
-        addMix(curElement.child);
-        break;
-      }
-    }
-    const length = curNode.elements.length;
-    const lastValue = curNode.elements[length - 1].value;
-    if (lastValue < finishValue && (!curNode.leaf)) {
-      addMix(curNode.lastChild);
-    }
-  };
-  addLarger(this.root);
+  addMix(this.root);
   return result;
 };
 
