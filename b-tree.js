@@ -20,9 +20,9 @@ function Element(value, typle) {
   this.child = null;
 }
 
-const method = {};
+const methods = {};
 
-method.add = function(
+methods.add = function(
   value, // number or string
   typle // related data
 ) {
@@ -104,11 +104,11 @@ method.add = function(
   return this;
 };
 
-method.delete = function(value) {
-
+methods.delete = function(value) {
+  // TODO: Implement delete
 };
 
-method.getEqual = function(value) {
+methods.getEqual = function(value) {
   let curNode = this.root;
   while (true) {
     let needChangedNodeFlag = true;
@@ -128,7 +128,7 @@ method.getEqual = function(value) {
   }
 };
 
-method.getLarger = function(value) {
+methods.getLarger = function(value) {
   const result = [];
   const addAll = function(curNode) {
     if (curNode.leaf) {
@@ -175,7 +175,7 @@ method.getLarger = function(value) {
   return addLarger(this.root);
 };
 
-method.getLess = function(value) {
+methods.getLess = function(value) {
   const result = [];
   const addAll = function(curNode) {
     if (curNode.leaf) {
@@ -193,13 +193,14 @@ method.getLess = function(value) {
 
   const addLess = function(curNode) {
     for (const curElement of curNode.elements) {
-      if (curElement.value < value) {
-        result.push(curElement.typle);
+      if (curElement.value <= value) {
         if (!curNode.leaf) {
           addAll(curElement.child);
         }
+        result.push(curElement.typle);
       } else if (!curNode.leaf) {
         addLess(curElement.child);
+        break;
       }
     }
     const length = curNode.elements.length;
@@ -211,13 +212,115 @@ method.getLess = function(value) {
   return result;
 };
 
-method.getBetween = function(
+methods.getBetween = function(
   startValue,
   finishValue
 ) {
 
+  const result = [];
+
+  const addAll = function(curNode) {
+    if (curNode.leaf) {
+      for (const curElement of curNode.elements) {
+        result.push(curElement.typle);
+      }
+    } else {
+      for (const curElement of curNode.elements) {
+        result.push(curElement.typle);
+        addAll(curElement.child);
+      }
+      addAll(curNode.lastChild);
+    }
+  };
+
+  const addLess = function(curNode) {
+    for (const curElement of curNode.elements) {
+      if (curElement.value <= finishValue) {
+        if (!curNode.leaf) {
+          addAll(curElement.child);
+        }
+        result.push(curElement.typle);
+      } else if (!curNode.leaf) {
+        addLess(curElement.child);
+        break;
+      }
+    }
+    const length = curNode.elements.length;
+    if (curNode.elements[length - 1].value < finishValue && (!curNode.leaf)) {
+      addLess(curNode.lastChild);
+    }
+  };
+
+  const addLarger = function(curNode) {
+    let curElementIndex = 0;
+    for (; curElementIndex < curNode.elements.length; curElementIndex++) {
+      const curElement = curNode.elements[curElementIndex];
+      if (curElement.value <= startValue) {
+        continue;
+      } else {
+        if (!curNode.leaf) {
+          addLarger(curElement.child);
+        }
+        result.push(curElement.typle);
+        for (const curElement of curNode.elements.slice(curElementIndex + 1)) {
+          if (!curNode.leaf) {
+            addAll(curElement.child);
+          }
+          result.push(curElement.typle);
+        }
+        if (!curNode.leaf) {
+          addAll(curNode.lastChild);
+        }
+        break;
+      }
+    }
+    if (!curNode.leaf) {
+      addLarger(curNode.lastChild);
+    }
+  };
+
+  const addMix = function(curNode) {
+    let curElementIndex = 0;
+    for (; curElementIndex < curNode.elements.length; curElementIndex++) {
+      const curElement = curNode.elements[curElementIndex];
+      if (curElement.value < startValue) continue;
+      if (finishValue < curElement.value) {
+        if (!curNode.leaf) {
+          addMix(curNode.child);
+        }
+        break;
+      }
+      if (!curNode.leaf) {
+        addLarger(curElement.child); /////
+      }
+      result.push(curElement.typle);
+
+      for (const curElement of curNode.elements.slice(curElementIndex + 1)) {
+        if (curElement.value <= finishValue) {
+          if (!curNode.leaf) {
+            addAll(curElement.child);
+          }
+          result.push(curElement.typle);
+        } else {
+          if (!curNode.leaf) {
+            addLess(curElement.child);
+          }
+          break;
+        }
+      }
+      break;
+    }
+    const length = curNode.elements.length;
+    const lastValue = curNode.elements[length - 1].value;
+    if (lastValue < finishValue && (!curNode.leaf)) {
+      addMix(curNode.lastChild);
+    }
+  };
+
+  addMix(this.root);
+  return result;
 };
 
-BTree.prototype = Object.assign({}, method);
+BTree.prototype = Object.assign({}, methods);
 
 module.exports = BTree;
