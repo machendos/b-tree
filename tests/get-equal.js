@@ -21,4 +21,5 @@ numbersIndexes
   .add(64,  { primaryKey: 64,  data: 'Beijing'    });
 
 // console.dir(numbersIndexes, { depth: null, showHidden: true });
-console.log(numbersIndexes.getEqual(150 + 'sdfsdf' + {a: 1}));
+console.log(numbersIndexes.getEqual(100));
+console.log(numbersIndexes.getEqual(150));
