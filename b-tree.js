@@ -194,12 +194,13 @@ method.getLess = function(value) {
   const addLess = function(curNode) {
     for (const curElement of curNode.elements) {
       if (curElement.value < value) {
-        result.push(curElement.typle);
         if (!curNode.leaf) {
           addAll(curElement.child);
         }
+        result.push(curElement.typle);
       } else if (!curNode.leaf) {
         addLess(curElement.child);
+        break;
       }
     }
     const length = curNode.elements.length;
