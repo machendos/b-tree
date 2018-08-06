@@ -133,7 +133,18 @@ method.getLarger = function(value) {
 };
 
 method.getLess = function(value) {
-
+  const result = [];
+  const getLessWorker = function(curNode) {
+    for (const curElement of curNode.elements) {
+      if (curElement.value < value) {
+        result.push(curElement.typle);
+        if (!curElement.leaf) {
+          getLessWorker(curElement.child);
+        }
+      } else break;
+    }
+  };
+  getLessWorker(this.root);
 };
 
 method.getBetween = function(
