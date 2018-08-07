@@ -7,18 +7,18 @@ const BTree = require(__dirname + '/..');
 const numbersIndexes = new BTree(2);
 
 numbersIndexes
-  .add(40)
-  .add(30)
-  .add(80)
-  .add(20)
-  .add(100)
-  .add(110)
-  .add(18)
-  .add(135)
-  .add(50)
-  .add(25)
-  .add(62)
-  .add(64)
+  .add(40,  { primaryKey: 40,  data: 'Abu Dhabi'  })
+  .add(30,  { primaryKey: 30,  data: 'Ankara'     })
+  .add(80,  { primaryKey: 80,  data: 'Jerusalem'  })
+  .add(20,  { primaryKey: 20,  data: 'Seoul'      })
+  .add(100, { primaryKey: 100, data: 'Kiev'       })
+  .add(110, { primaryKey: 110, data: 'Luxembourg' })
+  .add(18,  { primaryKey: 18,  data: 'Minsk'      })
+  .add(135, { primaryKey: 135, data: 'Oslo'       })
+  .add(50,  { primaryKey: 50,  data: 'Stockholm'  })
+  .add(25,  { primaryKey: 25,  data: 'Washington' })
+  .add(62,  { primaryKey: 62,  data: 'Lima'       })
+  .add(64,  { primaryKey: 64,  data: 'Beijing'    })
 ;
 
 console.dir(numbersIndexes, { depth: null, showHidden: true });
@@ -28,18 +28,18 @@ console.dir(numbersIndexes, { depth: null, showHidden: true });
 const strIndexes = new BTree(2);
 
 strIndexes
-  .add('40')
-  .add('30')
-  .add('80')
-  .add('20')
-  .add('100')
-  .add('110')
-  .add('18')
-  .add('135')
-  .add('50')
-  .add('25')
-  .add('62')
-  .add('64')
+  .add('40',  { primaryKey: 40,  data: 'Abu Dhabi'  })
+  .add('30',  { primaryKey: 30,  data: 'Ankara'     })
+  .add('80',  { primaryKey: 80,  data: 'Jerusalem'  })
+  .add('20',  { primaryKey: 20,  data: 'Seoul'      })
+  .add('100', { primaryKey: 100, data: 'Kiev'       })
+  .add('110', { primaryKey: 110, data: 'Luxembourg' })
+  .add('18',  { primaryKey: 18,  data: 'Minsk'      })
+  .add('135', { primaryKey: 135, data: 'Oslo'       })
+  .add('50',  { primaryKey: 50,  data: 'Stockholm'  })
+  .add('25',  { primaryKey: 25,  data: 'Washington' })
+  .add('62',  { primaryKey: 62,  data: 'Lima'       })
+  .add('64',  { primaryKey: 64,  data: 'Beijing'    })
 ;
 
 console.dir(strIndexes, { depth: null, showHidden: true });
