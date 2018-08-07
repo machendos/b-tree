@@ -18,4 +18,4 @@ numbersIndexes
   .add(62,  { primaryKey: 62,  data: 'Lima'       })
   .add(64,  { primaryKey: 64,  data: 'Beijing'    });
 
-console.log(numbersIndexes.getBetween(-2, 120));
+console.log(numbersIndexes.getBetween(-2, 64)); // 18, 20, 25, 30, 40, 50, 62

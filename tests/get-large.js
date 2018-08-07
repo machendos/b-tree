@@ -18,7 +18,7 @@ numbersIndexes
   .add(62,  { primaryKey: 62,  data: 'Lima'       })
   .add(64,  { primaryKey: 64,  data: 'Beijing'    });
 
-console.log(numbersIndexes.getLarger(0));
-console.log(numbersIndexes.getLarger(39));
-console.log(numbersIndexes.getLarger(100));
-console.log(numbersIndexes.getLarger(500));
+// console.log(numbersIndexes.getLarger(0));
+console.log(numbersIndexes.getLarger(64));
+// console.log(numbersIndexes.getLarger(100));
+// console.log(numbersIndexes.getLarger(500));

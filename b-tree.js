@@ -24,7 +24,7 @@ const methods = {};
 
 methods.add = function(
   value, // number or string
-  typle // related data
+  typle // related data (record)
 ) {
   if (this.root.elements.length === 0) {
     this.root.elements.push(new Element(value, typle));
@@ -102,10 +102,6 @@ methods.add = function(
   }
   curNode.elements.push(new Element(value, typle));
   return this;
-};
-
-methods.delete = function(value) {
-  // TODO: Implement delete
 };
 
 methods.getEqual = function(value) {
@@ -239,7 +235,7 @@ methods.getBetween = function(
         if (!curNode.leaf) {
           addAll(curElement.child);
         }
-        result.push(curElement.typle);
+        if (curElement.value < finishValue) result.push(curElement.typle);
       } else if (!curNode.leaf) {
         addLess(curElement.child);
         break;
@@ -291,7 +287,7 @@ methods.getBetween = function(
         break;
       }
       if (!curNode.leaf) {
-        addLarger(curElement.child); /////
+        addLarger(curElement.child);
       }
       result.push(curElement.typle);
 
@@ -300,7 +296,7 @@ methods.getBetween = function(
           if (!curNode.leaf) {
             addAll(curElement.child);
           }
-          result.push(curElement.typle);
+          if (curElement.value < finishValue) result.push(curElement.typle);
         } else {
           if (!curNode.leaf) {
             addLess(curElement.child);
